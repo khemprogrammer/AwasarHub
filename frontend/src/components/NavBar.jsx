@@ -66,7 +66,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="fixed w-full z-50 glass shadow-lg text-gray-800 dark:text-white transition-colors duration-300">
+      <nav className="fixed w-full z-50 glass shadow-lg text-slate-800 dark:text-white transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -85,7 +85,7 @@ export default function NavBar() {
                         value={searchQuery}
                         onChange={(e) => handleSearch(e)}
                         onFocus={() => searchQuery.length > 1 && setShowResults(true)}
-                        className="w-full pl-10 pr-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand text-slate-900 dark:text-white transition-all focus:bg-white dark:focus:bg-slate-900"
+                        className="w-full pl-10 pr-4 py-2 rounded-full border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand text-slate-900 dark:text-white transition-all focus:bg-white dark:focus:bg-black"
                     />
                 </div>
                 <AnimatePresence>
@@ -94,13 +94,13 @@ export default function NavBar() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
-                            className="absolute top-full mt-2 w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50"
+                            className="absolute top-full mt-2 w-full bg-white dark:bg-black rounded-xl shadow-xl border border-slate-100 dark:border-zinc-800 overflow-hidden z-50"
                         >
                             {searchResults.map(resultUser => (
                                 <button
                                     key={resultUser.id}
                                     onClick={() => handleUserClick(resultUser.username)}
-                                    className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors text-left"
+                                    className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-colors text-left"
                                 >
                                      <div className="w-8 h-8 rounded-full bg-brand/10 text-brand flex items-center justify-center font-bold text-sm overflow-hidden">
                                         {resultUser.avatar ? (
@@ -122,12 +122,12 @@ export default function NavBar() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link to="/feed" className="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Feed</Link>
-                <Link to="/jobs/new" className="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Post Job/Opp</Link>
+                <Link to="/feed" className="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">Feed</Link>
+                <Link to="/jobs/new" className="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">Post Job/Opp</Link>
                 
                 <button 
                   onClick={toggleTheme}
-                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-yellow-500 dark:text-yellow-400"
+                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-yellow-500 dark:text-yellow-400"
                   title="Toggle Theme"
                 >
                   {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} className="text-brand dark:text-brand-light" />}
@@ -135,7 +135,7 @@ export default function NavBar() {
 
                 <button 
                   onClick={() => setShowInfo(!showInfo)}
-                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-brand dark:text-brand-light"
+                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors text-brand dark:text-brand-light"
                   title="Page Info"
                 >
                   <FiInfo size={20} />
@@ -161,7 +161,7 @@ export default function NavBar() {
                   </div>
                 ) : (
                   <div className="ml-4 flex gap-2">
-                    <Link to="/login" className="px-4 py-2 text-sm rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors">Login</Link>
+                    <Link to="/login" className="px-4 py-2 text-sm rounded-full border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 transition-colors">Login</Link>
                     <Link to="/register" className="px-4 py-2 text-sm rounded-full bg-gradient-to-r from-brand-light to-brand-dark text-white hover:shadow-lg hover:scale-105 transition-all">Register</Link>
                   </div>
                 )}
@@ -171,7 +171,7 @@ export default function NavBar() {
             <div className="-mr-2 flex md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none transition-colors"
+                className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-800 focus:outline-none transition-colors"
               >
                 {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
               </button>
@@ -186,29 +186,29 @@ export default function NavBar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden glass border-t border-gray-200 dark:border-gray-700"
+              className="md:hidden glass border-t border-slate-200 dark:border-zinc-800"
             >
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <div className="flex items-center justify-between px-3 py-2">
-                  <span className="text-gray-600 dark:text-gray-300">Theme</span>
+                  <span className="text-slate-600 dark:text-slate-300">Theme</span>
                   <button 
                     onClick={toggleTheme}
-                    className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-yellow-500 dark:text-yellow-400"
+                    className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors text-yellow-500 dark:text-yellow-400"
                   >
                     {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} className="text-blue-600 dark:text-blue-300" />}
                   </button>
                 </div>
-                <Link to="/feed" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Feed</Link>
-                <Link to="/jobs/new" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Post Job/Opp</Link>
+                <Link to="/feed" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors">Feed</Link>
+                <Link to="/jobs/new" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors">Post Job/Opp</Link>
                 {user ? (
                   <>
-                    <div className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400">Signed in as {user.username}</div>
-                    <button onClick={logout} className="block w-full text-left px-3 py-2 text-red-600 dark:text-red-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors">Logout</button>
+                    <div className="px-3 py-2 text-sm text-slate-600 dark:text-slate-400">Signed in as {user.username}</div>
+                    <button onClick={logout} className="block w-full text-left px-3 py-2 text-red-600 dark:text-red-400 hover:bg-slate-200 dark:hover:bg-zinc-800 rounded-md transition-colors">Logout</button>
                   </>
                 ) : (
                   <>
-                    <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Login</Link>
-                    <Link to="/register" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Register</Link>
+                    <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors">Login</Link>
+                    <Link to="/register" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors">Register</Link>
                   </>
                 )}
               </div>
@@ -224,20 +224,20 @@ export default function NavBar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 right-4 md:right-20 z-40 w-80 glass p-6 rounded-xl shadow-2xl border border-blue-200 dark:border-blue-500/30 text-gray-800 dark:text-white"
+            className="fixed top-20 right-4 md:right-20 z-40 w-80 glass p-6 rounded-xl shadow-2xl border border-blue-200 dark:border-blue-500/30 text-slate-800 dark:text-white"
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
                 <FiInfo /> About this Page
               </h3>
-              <button onClick={() => setShowInfo(false)} className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition-colors">
+              <button onClick={() => setShowInfo(false)} className="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors">
                 <FiX />
               </button>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
               {pageInfo.desc}
             </p>
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-500">
+            <div className="mt-4 pt-4 border-t border-slate-200 dark:border-zinc-800 text-xs text-slate-500 dark:text-slate-500">
               AwasarHub Professional Suite v1.0
             </div>
           </motion.div>

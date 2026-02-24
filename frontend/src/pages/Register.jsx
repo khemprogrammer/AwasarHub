@@ -24,19 +24,19 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-pink-100 dark:bg-black transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         className="w-full max-w-md"
       >
-        <div className="glass rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="glass rounded-2xl p-8 shadow-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-500 bg-clip-text text-transparent">
               Join AwasarHub
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">Start your professional journey today</p>
+            <p className="text-slate-600 dark:text-slate-400 mt-2">Start your professional journey today</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-6">
@@ -85,7 +85,7 @@ export default function Register() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none"
                 >
                   {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
                 </button>
@@ -112,7 +112,7 @@ export default function Register() {
             </motion.button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
             Already have an account?{' '}
             <Link to="/login" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
               Sign In

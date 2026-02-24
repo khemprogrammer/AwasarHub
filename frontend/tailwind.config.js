@@ -12,7 +12,7 @@ export default {
         },
         surface: {
           light: '#f8fafc', // Slate 50
-          dark: '#0f172a', // Slate 900
+          dark: '#000000', // Black
         }
       },
       animation: {

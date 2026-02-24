@@ -153,20 +153,20 @@ export default function PublicProfile() {
   if (!profile) return <div className="min-h-screen pt-24 flex justify-center"><div className="animate-spin rounded-full h-8 w-8 border-4 border-brand border-t-transparent"></div></div>
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-black pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Profile Header */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-8"
+          className="bg-white dark:bg-black rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200 dark:border-zinc-800"
         >
           <div className="h-32 bg-gradient-to-r from-brand to-brand-dark"></div>
           <div className="px-8 pb-8">
             <div className="relative flex justify-between items-end -mt-12 mb-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-white dark:bg-gray-700 p-1 shadow-lg">
-                  <div className="w-full h-full rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-3xl font-bold text-gray-400">
+                <div className="w-24 h-24 rounded-full bg-white dark:bg-black p-1 shadow-lg">
+                  <div className="w-full h-full rounded-full bg-slate-200 dark:bg-zinc-800 flex items-center justify-center text-3xl font-bold text-slate-400">
                     {profile.username?.[0]?.toUpperCase()}
                   </div>
                 </div>
@@ -176,7 +176,7 @@ export default function PublicProfile() {
                   onClick={handleFollow}
                   className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${
                     profile.is_following 
-                      ? 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200' 
+                      ? 'bg-slate-100 text-slate-800 hover:bg-slate-200 dark:bg-zinc-800 dark:text-slate-200' 
                       : 'bg-brand text-white hover:bg-brand-dark'
                   }`}
                 >
@@ -186,10 +186,10 @@ export default function PublicProfile() {
             </div>
             
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{profile.first_name} {profile.last_name}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">{profile.first_name} {profile.last_name}</h1>
               <p className="text-brand font-medium mb-4">@{profile.username}</p>
               
-              <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300 mb-6">
+              <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300 mb-6">
                  {profile.city && (
                     <div className="flex items-center gap-1">
                       <FiMapPin /> {profile.city}, {profile.country}
@@ -200,18 +200,18 @@ export default function PublicProfile() {
                  </div>
               </div>
 
-              <div className="flex gap-6 border-t border-gray-100 dark:border-gray-700 pt-6">
+              <div className="flex gap-6 border-t border-slate-100 dark:border-zinc-800 pt-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{posts.length}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Posts</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{posts.length}</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">Posts</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.followers_count}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Followers</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{profile.followers_count}</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">Followers</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{profile.following_count}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Following</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{profile.following_count}</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">Following</div>
                 </div>
               </div>
             </div>
@@ -220,14 +220,14 @@ export default function PublicProfile() {
 
         {/* Posts Grid */}
         <div className="grid gap-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Posts</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Posts</h2>
           {loading ? (
              <div className="text-center py-12">
                <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-brand border-t-transparent"></div>
              </div>
           ) : posts.length === 0 ? (
-             <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow">
-               <p className="text-gray-500">No posts yet.</p>
+             <div className="text-center py-12 bg-white dark:bg-black rounded-xl shadow border border-slate-200 dark:border-zinc-800">
+               <p className="text-slate-500">No posts yet.</p>
              </div>
           ) : (
              posts.map(post => (
@@ -235,31 +235,31 @@ export default function PublicProfile() {
                  key={`${post.type}-${post.id}`}
                  initial={{ opacity: 0, y: 20 }}
                  animate={{ opacity: 1, y: 0 }}
-                 className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden"
+                className="glass rounded-2xl overflow-hidden hover:shadow-2xl hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200 hover:translate-y-[1px] group"
                >
-                 <div className="p-6">
+                 <div className="p-5">
                    <div className="flex justify-between items-start mb-4">
                       <div>
-                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ring-1 ring-inset ${
                           post.type === 'job' 
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                            : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                            ? 'bg-blue-50 text-blue-700 ring-blue-200 dark:bg-gradient-to-r dark:from-blue-900/50 dark:to-blue-700/40 dark:text-blue-200 dark:ring-blue-400/20'
+                            : 'bg-purple-50 text-purple-700 ring-purple-200 dark:bg-gradient-to-r dark:from-purple-900/50 dark:to-purple-700/40 dark:text-purple-200 dark:ring-purple-400/20'
                         }`}>
                           {post.type === 'job' ? <><FiBriefcase className="inline mr-1"/> Job</> : <><FiAward className="inline mr-1"/> Opportunity</>}
                         </span>
-                        <span className="text-gray-400 text-sm ml-2">{new Date(post.created_at).toLocaleDateString()}</span>
+                        <span className="text-slate-400 text-sm ml-2">{new Date(post.created_at).toLocaleDateString()}</span>
                       </div>
                    </div>
 
-                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{post.title}</h3>
-                   <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{post.description}</p>
+                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{post.title}</h3>
+                   <p className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-3">{post.description}</p>
                    
                    {/* Engagement Stats */}
-                   <div className="flex items-center gap-6 border-t border-gray-100 dark:border-gray-700 pt-4 mt-4">
+                   <div className="flex items-center justify-between border-t border-slate-100 dark:border-zinc-800 pt-4 px-4 py-3 -mx-6 mt-4 bg-white/80 dark:bg-black/70 backdrop-blur-sm rounded-b-2xl">
                      <button 
                        onClick={() => handleAction(post, 'like')}
                        className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                         post.liked_by_user ? 'text-pink-500' : 'text-gray-500 hover:text-pink-500'
+                         post.liked_by_user ? 'text-pink-500' : 'text-slate-500 hover:text-pink-500'
                        }`}
                      >
                        <FiHeart className={post.liked_by_user ? 'fill-current' : ''} /> {post.likes}
@@ -267,21 +267,21 @@ export default function PublicProfile() {
                      
                      <button 
                        onClick={() => toggleComments(post)}
-                       className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-500 transition-colors"
+                       className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-500 transition-colors"
                      >
                        <FiMessageSquare /> {post.comments}
                      </button>
 
                      <button 
                        onClick={() => handleAction(post, 'repost')}
-                       className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-green-500 transition-colors"
+                       className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-green-500 transition-colors"
                      >
                        <FiRepeat /> {post.reposts}
                      </button>
 
                      <button 
                        onClick={() => handleAction(post, 'share')}
-                       className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-brand transition-colors"
+                       className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand transition-colors"
                      >
                        <FiShare2 /> {post.shares}
                      </button>
@@ -294,7 +294,7 @@ export default function PublicProfile() {
                          initial={{ height: 0, opacity: 0 }}
                          animate={{ height: 'auto', opacity: 1 }}
                          exit={{ height: 0, opacity: 0 }}
-                         className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700"
+                         className="mt-4 pt-4 border-t border-slate-100 dark:border-zinc-800 bg-white/80 dark:bg-black/70 backdrop-blur-sm rounded-b-xl"
                        >
                          <div className="flex gap-2 mb-4">
                            <input 
@@ -302,7 +302,7 @@ export default function PublicProfile() {
                              value={commentText}
                              onChange={(e) => setCommentText(e.target.value)}
                              placeholder="Write a comment..."
-                             className="flex-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-brand"
+                             className="flex-1 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-brand text-slate-900 dark:text-white"
                              onKeyPress={(e) => e.key === 'Enter' && submitComment(post)}
                            />
                            <button 
@@ -315,16 +315,16 @@ export default function PublicProfile() {
                          </div>
 
                          {loadingComments ? (
-                            <div className="text-center text-sm text-gray-500">Loading comments...</div>
+                            <div className="text-center text-sm text-slate-500">Loading comments...</div>
                          ) : (
                             <div className="space-y-3 max-h-60 overflow-y-auto">
                               {comments[`${post.type}-${post.id}`]?.map((comment, idx) => (
-                                <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl">
+                                <div key={idx} className="bg-slate-50 dark:bg-zinc-900 p-3 rounded-xl border border-slate-100 dark:border-zinc-800">
                                   <div className="flex justify-between items-start mb-1">
-                                    <span className="font-semibold text-sm text-gray-900 dark:text-white">{comment.user}</span>
-                                    <span className="text-xs text-gray-400">{new Date(comment.created_at).toLocaleDateString()}</span>
+                                    <span className="font-semibold text-sm text-slate-900 dark:text-white">{comment.user}</span>
+                                    <span className="text-xs text-slate-400">{new Date(comment.created_at).toLocaleDateString()}</span>
                                   </div>
-                                  <p className="text-sm text-gray-700 dark:text-gray-300">{comment.text}</p>
+                                  <p className="text-sm text-slate-700 dark:text-slate-300">{comment.text}</p>
                                 </div>
                               ))}
                             </div>

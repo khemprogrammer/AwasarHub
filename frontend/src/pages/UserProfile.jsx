@@ -34,9 +34,9 @@ const EditProfileModal = ({ user, onClose, onUpdate }) => {
             <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+                className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl border border-slate-200 dark:border-zinc-800"
             >
-                <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <div className="p-6 border-b border-slate-100 dark:border-zinc-800 flex justify-between items-center">
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white">Edit Profile</h3>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                         <FiX size={24} />
@@ -45,61 +45,61 @@ const EditProfileModal = ({ user, onClose, onUpdate }) => {
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">First Name</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">First Name</label>
                             <input 
                                 type="text" 
                                 value={formData.first_name}
                                 onChange={e => setFormData({...formData, first_name: e.target.value})}
-                                className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                                className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Last Name</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">Last Name</label>
                             <input 
                                 type="text" 
                                 value={formData.last_name}
                                 onChange={e => setFormData({...formData, last_name: e.target.value})}
-                                className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                                className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Headline</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">Headline</label>
                         <input 
                             type="text" 
                             value={formData.headline}
                             onChange={e => setFormData({...formData, headline: e.target.value})}
                             placeholder="Software Engineer | AI Enthusiast"
-                            className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                            className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                         />
                     </div>
-                     <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">City</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">City</label>
                             <input 
                                 type="text" 
                                 value={formData.city}
                                 onChange={e => setFormData({...formData, city: e.target.value})}
-                                className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                                className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Country</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">Country</label>
                             <input 
                                 type="text" 
                                 value={formData.country}
                                 onChange={e => setFormData({...formData, country: e.target.value})}
-                                className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                                className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Bio</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-1">Bio</label>
                         <textarea 
                             value={formData.bio}
                             onChange={e => setFormData({...formData, bio: e.target.value})}
                             rows={3}
-                            className="w-full rounded-lg border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
+                            className="w-full rounded-lg border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand"
                         />
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
@@ -119,9 +119,9 @@ const UserListModal = ({ title, users, onClose }) => (
         <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"
+            className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[80vh] border border-slate-200 dark:border-zinc-800"
         >
-            <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+            <div className="p-4 border-b border-slate-100 dark:border-zinc-800 flex justify-between items-center">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h3>
                 <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                     <FiX size={24} />
@@ -298,7 +298,7 @@ export default function UserProfile() {
   if (loading) return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-12 w-12 border-4 border-brand border-t-transparent"></div></div>
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-black transition-colors duration-300">
       <AnimatePresence>
           {showEditProfile && (
               <EditProfileModal 
@@ -328,15 +328,15 @@ export default function UserProfile() {
         {/* Profile Header */}
         <div className="glass rounded-2xl overflow-hidden p-8 relative">
             <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-brand-light to-brand-dark opacity-90"></div>
-            <div className="relative mt-12 flex flex-col md:flex-row items-end md:items-center gap-6">
-                <div className="w-32 h-32 rounded-full border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-700 flex items-center justify-center text-6xl text-brand shadow-xl overflow-hidden">
+            <div className="relative mt-12 flex flex-col md:flex-row items-start gap-6">
+                <div className="w-32 h-32 rounded-full border-4 border-white dark:border-zinc-900 bg-white dark:bg-zinc-800 flex items-center justify-center text-6xl text-brand shadow-xl overflow-hidden shrink-0">
                      {user?.avatar ? (
                         <img src={user.avatar} alt={user.username} className="w-full h-full object-cover" />
                     ) : (
                         user?.username?.[0]?.toUpperCase()
                     )}
                 </div>
-                <div className="flex-1 mb-2">
+                <div className="flex-1 mb-2 md:mt-16 text-left">
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{user?.first_name} {user?.last_name || user?.username}</h1>
                     {user?.headline ? (
                         <p className="text-slate-600 dark:text-slate-400 font-medium">{user.headline}</p>
@@ -344,7 +344,7 @@ export default function UserProfile() {
                         <p className="text-slate-500 dark:text-slate-500 italic">No headline added</p>
                     )}
                     
-                    <div className="flex flex-wrap gap-4 mt-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex flex-wrap justify-start gap-4 mt-4 text-sm text-slate-500 dark:text-slate-400">
                         {user?.city || user?.country ? (
                              <span className="flex items-center gap-1"><FiMapPin /> {user?.city}{user?.city && user?.country ? ', ' : ''}{user?.country}</span>
                         ) : null}
@@ -357,17 +357,17 @@ export default function UserProfile() {
                         </p>
                     )}
 
-                    <div className="flex gap-6 mt-6">
+                    <div className="flex justify-start gap-6 mt-6">
                         <button 
                             onClick={() => setShowFollowers(true)}
-                            className="text-center group hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors cursor-pointer"
+                            className="text-center group hover:bg-slate-100 dark:hover:bg-zinc-800 p-2 rounded-lg transition-colors cursor-pointer"
                         >
                             <span className="block text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand transition-colors">{connections.followers.length}</span>
                             <span className="text-xs text-slate-500 uppercase tracking-wide">Followers</span>
                         </button>
                         <button 
                             onClick={() => setShowFollowing(true)}
-                            className="text-center group hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors cursor-pointer"
+                            className="text-center group hover:bg-slate-100 dark:hover:bg-zinc-800 p-2 rounded-lg transition-colors cursor-pointer"
                         >
                             <span className="block text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand transition-colors">{connections.following.length}</span>
                             <span className="text-xs text-slate-500 uppercase tracking-wide">Following</span>
@@ -376,7 +376,7 @@ export default function UserProfile() {
                 </div>
                 <button 
                     onClick={() => setShowEditProfile(true)}
-                    className="btn-primary py-2 px-6 text-sm flex items-center gap-2"
+                    className="btn-primary py-2 px-6 text-sm flex items-center gap-2 md:mt-16 self-start mt-4 md:mt-16"
                 >
                     <FiEdit3 /> Edit Profile
                 </button>
@@ -388,7 +388,7 @@ export default function UserProfile() {
             <h2 className="text-2xl font-bold text-slate-800 dark:text-white px-2">Your Activity</h2>
             
             {posts.length === 0 ? (
-                <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div className="text-center py-12 bg-white dark:bg-black rounded-2xl border border-slate-200 dark:border-zinc-800">
                     <FiBriefcase className="mx-auto h-12 w-12 text-slate-400" />
                     <h3 className="mt-2 text-sm font-medium text-slate-900 dark:text-white">No posts yet</h3>
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Get started by creating a new job posting or opportunity.</p>
@@ -400,9 +400,9 @@ export default function UserProfile() {
                             key={`${post.type}-${post.id}`}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden"
+                            className="glass rounded-2xl overflow-hidden hover:shadow-2xl hover:border-slate-300 dark:hover:border-white/20 transition-all duration-200 hover:translate-y-[1px] group"
                         >
-                            <div className="p-6">
+                            <div className="p-5">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-brand/10 text-brand flex items-center justify-center font-bold">
@@ -415,7 +415,7 @@ export default function UserProfile() {
                                             </p>
                                         </div>
                                     </div>
-                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${post.type === 'job' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'}`}>
+                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ring-1 ring-inset ${post.type === 'job' ? 'bg-blue-50 text-blue-700 ring-blue-200 dark:bg-gradient-to-r dark:from-blue-900/50 dark:to-blue-700/40 dark:text-blue-200 dark:ring-blue-400/20' : 'bg-purple-50 text-purple-700 ring-purple-200 dark:bg-gradient-to-r dark:from-purple-900/50 dark:to-purple-700/40 dark:text-purple-200 dark:ring-purple-400/20'}`}>
                                         {post.type === 'job' ? <FiBriefcase className="inline mr-1"/> : <FiAward className="inline mr-1"/>}
                                         {post.type === 'job' ? 'Job' : 'Opportunity'}
                                     </span>
@@ -429,7 +429,7 @@ export default function UserProfile() {
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="mt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-4">
+                                <div className="mt-6 flex items-center justify-between border-t border-slate-100 dark:border-zinc-800 pt-4 px-4 py-3 -mx-6 mb-[-1.5rem] bg-white/80 dark:bg-black/70 backdrop-blur-sm rounded-b-2xl">
                                     <button 
                                         onClick={() => handleAction(post, 'like')}
                                         className={`flex items-center gap-2 text-sm font-medium transition-colors ${post.liked_by_user ? 'text-pink-500' : 'text-slate-500 dark:text-slate-400 hover:text-pink-500'}`}
@@ -466,7 +466,7 @@ export default function UserProfile() {
                                             initial={{ opacity: 0, height: 0 }}
                                             animate={{ opacity: 1, height: 'auto' }}
                                             exit={{ opacity: 0, height: 0 }}
-                                            className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700"
+                                            className="mt-4 pt-4 border-t border-slate-100 dark:border-zinc-800 bg-white/80 dark:bg-black/70 backdrop-blur-sm px-5 pb-5 -mx-6 mb-[-1.5rem]"
                                         >
                                             {/* Comment List */}
                                             <div className="mb-4 space-y-3 max-h-60 overflow-y-auto">
@@ -474,7 +474,7 @@ export default function UserProfile() {
                                                     <div className="text-center text-sm text-slate-500">Loading comments...</div>
                                                 ) : comments[`${post.type}-${post.id}`]?.length > 0 ? (
                                                     comments[`${post.type}-${post.id}`].map(comment => (
-                                                        <div key={comment.id} className="bg-slate-50 dark:bg-slate-900 p-3 rounded-lg text-sm">
+                                                        <div key={comment.id} className="bg-white dark:bg-zinc-900 p-3 rounded-lg text-sm border border-slate-100 dark:border-zinc-800">
                                                             <div className="flex justify-between items-start mb-1">
                                                                 <span className="font-semibold text-slate-900 dark:text-white">{comment.user?.username || 'User'}</span>
                                                                 <span className="text-xs text-slate-500">{new Date(comment.created_at).toLocaleDateString()}</span>
@@ -494,7 +494,7 @@ export default function UserProfile() {
                                                     value={commentText}
                                                     onChange={(e) => setCommentText(e.target.value)}
                                                     placeholder="Add a comment..." 
-                                                    className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-brand"
+                                                    className="flex-1 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
                                                 />
                                                 <button 
                                                     onClick={() => handleComment(post)}

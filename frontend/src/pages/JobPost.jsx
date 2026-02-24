@@ -84,13 +84,13 @@ export default function JobPost() {
           </div>
 
           <div className="flex justify-center mb-8">
-            <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex">
+            <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-1 rounded-xl flex">
                 <button
                     type="button"
                     onClick={() => setPostType('job')}
                     className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                         postType === 'job' 
-                        ? 'bg-white dark:bg-slate-700 text-brand shadow-sm' 
+                        ? 'bg-white dark:bg-black text-brand shadow-sm' 
                         : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                 >
@@ -101,7 +101,7 @@ export default function JobPost() {
                     onClick={() => setPostType('opportunity')}
                     className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                         postType === 'opportunity' 
-                        ? 'bg-white dark:bg-slate-700 text-brand shadow-sm' 
+                        ? 'bg-white dark:bg-black text-brand shadow-sm' 
                         : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                 >
