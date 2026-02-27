@@ -7,6 +7,8 @@ class User(AbstractUser):
     country = models.CharField(max_length=120, blank=True)
     headline = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
+    avatar = models.URLField(blank=True)
+    avatar_image = models.ImageField(upload_to="avatars/", blank=True, null=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     interests = models.JSONField(default=list, blank=True)

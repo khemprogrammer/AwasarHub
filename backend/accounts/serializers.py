@@ -14,6 +14,8 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
+            "avatar",
+            "avatar_image",
             "city",
             "country",
             "headline",

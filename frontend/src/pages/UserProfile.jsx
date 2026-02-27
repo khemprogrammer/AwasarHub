@@ -1,8 +1,144 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiUser, FiMapPin, FiCalendar, FiHeart, FiMessageSquare, FiRepeat, FiShare2, FiSend, FiBriefcase, FiAward, FiX, FiEdit3 } from 'react-icons/fi'
 import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
+
+const AvatarCropModal = ({ src, onClose, onCropped }) => {
+    const container = 300
+    const minScale = 1
+    const maxScale = 3
+    const [scale, setScale] = useState(1)
+    const [imgEl, setImgEl] = useState(null)
+    const [dims, setDims] = useState({ w: 0, h: 0 })
+    const [pos, setPos] = useState({ x: 0, y: 0 })
+    const dragRef = useRef({ dragging: false, x: 0, y: 0 })
+    const pinchRef = useRef({ active: false, startDist: 0, startScale: 1 })
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
+    const dist = (t1, t2) => Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY)
+
+    const onImgLoad = (e) => {
+        const iw = e.target.naturalWidth
+        const ih = e.target.naturalHeight
+        setDims({ w: iw, h: ih })
+        const base = Math.max(container / iw, container / ih)
+        const dw = iw * base * 1
+        const dh = ih * base * 1
+        setPos({ x: (container - dw) / 2, y: (container - dh) / 2 })
+    }
+
+    const onMouseDown = (e) => {
+        dragRef.current = { dragging: true, x: e.clientX - pos.x, y: e.clientY - pos.y }
+        window.addEventListener('mouseup', onMouseUp)
+        window.addEventListener('mousemove', onMouseMove)
+    }
+    const onMouseUp = () => {
+        dragRef.current.dragging = false
+        window.removeEventListener('mouseup', onMouseUp)
+        window.removeEventListener('mousemove', onMouseMove)
+    }
+    const onMouseMove = (e) => {
+        if (!dragRef.current.dragging) return
+        setPos({ x: e.clientX - dragRef.current.x, y: e.clientY - dragRef.current.y })
+    }
+
+    const onTouchStart = (e) => {
+        if (e.touches.length === 1) {
+            const t = e.touches[0]
+            dragRef.current = { dragging: true, x: t.clientX - pos.x, y: t.clientY - pos.y }
+        } else if (e.touches.length === 2) {
+            pinchRef.current = { active: true, startDist: dist(e.touches[0], e.touches[1]), startScale: scale }
+        }
+    }
+    const onTouchMove = (e) => {
+        if (pinchRef.current.active && e.touches.length === 2) {
+            const d = dist(e.touches[0], e.touches[1])
+            const ratio = d / (pinchRef.current.startDist || d)
+            setScale(clamp(pinchRef.current.startScale * ratio, minScale, maxScale))
+            e.preventDefault()
+            return
+        }
+        if (dragRef.current.dragging && e.touches.length === 1) {
+            const t = e.touches[0]
+            setPos({ x: t.clientX - dragRef.current.x, y: t.clientY - dragRef.current.y })
+            e.preventDefault()
+        }
+    }
+    const onTouchEnd = () => {
+        dragRef.current.dragging = false
+        pinchRef.current.active = false
+    }
+
+    const doCrop = async () => {
+        if (!imgEl || !dims.w) return
+        const base = Math.max(container / dims.w, container / dims.h)
+        const dw = dims.w * base * scale
+        const dh = dims.h * base * scale
+        const canvas = document.createElement('canvas')
+        canvas.width = 512
+        canvas.height = 512
+        const ctx = canvas.getContext('2d')
+        const r = 512 / container
+        ctx.scale(r, r)
+        ctx.drawImage(imgEl, pos.x, pos.y, dw, dh)
+        canvas.toBlob((blob) => {
+            if (!blob) return
+            const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' })
+            onCropped(file)
+        }, 'image/jpeg', 0.9)
+    }
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-zinc-800">
+                <div className="p-4 border-b border-slate-100 dark:border-zinc-800 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Adjust Avatar</h3>
+                    <button onClick={onClose} className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"><FiX /></button>
+                </div>
+                <div className="p-5 space-y-4">
+                    <div
+                      style={{ width: container, height: container }}
+                      className="mx-auto rounded-xl overflow-hidden bg-slate-200 dark:bg-zinc-800 relative cursor-grab touch-none"
+                      onMouseDown={onMouseDown}
+                      onTouchStart={onTouchStart}
+                      onTouchMove={onTouchMove}
+                      onTouchEnd={onTouchEnd}
+                    >
+                        <img
+                          ref={setImgEl}
+                          src={src}
+                          onLoad={onImgLoad}
+                          alt=""
+                          style={{
+                            width: dims.w ? 'auto' : '100%',
+                            height: dims.w ? 'auto' : '100%',
+                            position: 'absolute',
+                            left: pos.x,
+                            top: pos.y,
+                            transform: `scale(${(Math.max(container / dims.w, container / dims.h) || 1) * scale})`,
+                            transformOrigin: 'top left'
+                          }}
+                          draggable={false}
+                        />
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{ background: `radial-gradient(circle at 50% 50%, transparent ${container/2 - 1}px, rgba(0,0,0,0.55) ${container/2}px)` }}
+                        />
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full ring-2 ring-white/70 pointer-events-none"></div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-xs text-slate-500">Zoom</span>
+                        <input type="range" min={minScale} max={maxScale} step="0.01" value={scale} onChange={(e) => setScale(parseFloat(e.target.value))} className="flex-1" />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <button onClick={onClose} className="px-4 py-2 rounded-lg border border-slate-200 dark:border-zinc-700">Cancel</button>
+                        <button onClick={doCrop} className="px-4 py-2 rounded-lg bg-brand text-white">Save</button>
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+    )
+}
 
 const EditProfileModal = ({ user, onClose, onUpdate }) => {
     const [formData, setFormData] = useState({
@@ -149,7 +285,7 @@ const UserListModal = ({ title, users, onClose }) => (
 )
 
 export default function UserProfile() {
-  const { user, login } = useAuth() // Assuming login can be used to update user context or we need a setUser
+  const { user, refreshUser } = useAuth()
   // Actually, useAuth usually exposes user state. If we update user via API, we should update local context.
   // Let's assume for now we just refresh the page or manually update if setUser is exposed. 
   // Checking AuthContext... it might not expose setUser. 
@@ -167,6 +303,9 @@ export default function UserProfile() {
   const [showFollowers, setShowFollowers] = useState(false)
   const [showFollowing, setShowFollowing] = useState(false)
   const [connections, setConnections] = useState({ followers: [], following: [] })
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const fileInputRef = useRef(null)
+  const [cropSrc, setCropSrc] = useState(null)
 
   useEffect(() => {
     fetchPosts()
@@ -182,10 +321,24 @@ export default function UserProfile() {
       }
   }
 
+  const triggerAvatarPicker = () => {
+      if (fileInputRef.current) fileInputRef.current.click()
+  }
+
+  const onAvatarSelected = async (e) => {
+      const f = e.target.files && e.target.files[0]
+      if (!f) return
+      const reader = new FileReader()
+      reader.onload = () => setCropSrc(reader.result)
+      reader.readAsDataURL(f)
+  }
+
   const handleProfileUpdate = (updatedUser) => {
-      // Force reload to update context or if context has a refresh method use that.
-      // For now, reload page is simplest if context doesn't support update.
-      window.location.reload()
+      if (refreshUser) {
+          refreshUser()
+      } else {
+          window.location.reload()
+      }
   }
 
   const fetchPosts = async () => {
@@ -300,6 +453,24 @@ export default function UserProfile() {
   return (
     <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-black transition-colors duration-300">
       <AnimatePresence>
+          {cropSrc && (
+              <AvatarCropModal 
+                src={cropSrc}
+                onClose={() => setCropSrc(null)}
+                onCropped={async (file) => {
+                    const form = new FormData()
+                    form.append('avatar', file)
+                    setUploadingAvatar(true)
+                    try {
+                        await api.post('/api/auth/avatar/upload/', form, { headers: { 'Content-Type': 'multipart/form-data' } })
+                        setCropSrc(null)
+                        if (refreshUser) await refreshUser()
+                    } finally {
+                        setUploadingAvatar(false)
+                    }
+                }}
+              />
+          )}
           {showEditProfile && (
               <EditProfileModal 
                   user={user} 
@@ -374,12 +545,22 @@ export default function UserProfile() {
                         </button>
                     </div>
                 </div>
-                <button 
-                    onClick={() => setShowEditProfile(true)}
-                    className="btn-primary py-2 px-6 text-sm flex items-center gap-2 md:mt-16 self-start mt-4 md:mt-16"
-                >
-                    <FiEdit3 /> Edit Profile
-                </button>
+                <div className="flex flex-col gap-2 md:mt-16 self-start mt-4 md:mt-16">
+                    <button 
+                        onClick={() => setShowEditProfile(true)}
+                        className="btn-primary py-2 px-6 text-sm flex items-center gap-2"
+                    >
+                        <FiEdit3 /> Edit Profile
+                    </button>
+                    <button 
+                        onClick={() => { if (fileInputRef) { fileInputRef.current?.click() } }}
+                        disabled={uploadingAvatar}
+                        className="px-4 py-2 text-sm rounded-lg border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
+                    >
+                        {uploadingAvatar ? 'Uploading...' : 'Change Avatar'}
+                    </button>
+                    <input ref={fileInputRef} onChange={onAvatarSelected} type="file" accept="image/*" className="hidden" />
+                </div>
             </div>
         </div>
 

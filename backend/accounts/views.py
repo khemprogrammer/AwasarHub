@@ -11,6 +11,12 @@ from engagement.models import EngagementLog, Comment
 from .models import Connection, User
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from PIL import Image
+import io
+import time
 
 
 class RegisterView(generics.CreateAPIView):
@@ -109,6 +115,19 @@ class PublicUserProfileView(APIView):
         return Response(data)
 
 
+class PublicUserConnectionsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        followers = Connection.objects.filter(following=user).select_related('follower')
+        following = Connection.objects.filter(follower=user).select_related('following')
+        return Response({
+            "followers": UserSerializer([c.follower for c in followers], many=True).data,
+            "following": UserSerializer([c.following for c in following], many=True).data
+        })
+
+
 class PublicUserPostsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -156,3 +175,37 @@ class UserSearchView(APIView):
         
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
+
+
+class AvatarUploadView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        file = request.FILES.get('avatar')
+        if not file:
+            return Response({"detail": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
+        if file.size > 5 * 1024 * 1024:
+            return Response({"detail": "Max size is 5MB"}, status=status.HTTP_400_BAD_REQUEST)
+        if not file.content_type.lower() in ['image/jpeg', 'image/png', 'image/webp']:
+            return Response({"detail": "Only JPEG/PNG/WebP allowed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            image = Image.open(file)
+            image = image.convert('RGB')
+            image.thumbnail((512, 512))
+            buf = io.BytesIO()
+            image.save(buf, format='JPEG', quality=85)
+            buf.seek(0)
+
+            filename = f"avatars/u{request.user.id}_{int(time.time())}.jpg"
+            path = default_storage.save(filename, ContentFile(buf.read()))
+
+            request.user.avatar_image = path
+            # Public URL
+            public_url = request.build_absolute_uri(settings.MEDIA_URL + path.replace('\\', '/'))
+            request.user.avatar = public_url
+            request.user.save(update_fields=['avatar_image', 'avatar'])
+
+            return Response({"avatar": public_url})
+        except Exception as e:
+            return Response({"detail": "Failed to process image"}, status=status.HTTP_400_BAD_REQUEST)

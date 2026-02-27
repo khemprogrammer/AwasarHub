@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiUser, FiMapPin, FiCalendar, FiHeart, FiMessageSquare, FiRepeat, FiShare2, FiSend, FiBriefcase, FiAward, FiUserPlus, FiUserCheck } from 'react-icons/fi'
+import { FiUser, FiMapPin, FiCalendar, FiHeart, FiMessageSquare, FiRepeat, FiShare2, FiSend, FiBriefcase, FiAward, FiUserPlus, FiUserCheck, FiX } from 'react-icons/fi'
 import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
 
@@ -10,6 +10,14 @@ export default function PublicProfile() {
   const { user: currentUser } = useAuth()
   const [profile, setProfile] = useState(null)
   const [posts, setPosts] = useState([])
+  const [followers, setFollowers] = useState([])
+  const [following, setFollowing] = useState([])
+  const [showFollowers, setShowFollowers] = useState(false)
+  const [showFollowing, setShowFollowing] = useState(false)
+  const [loadingFollowers, setLoadingFollowers] = useState(false)
+  const [loadingFollowing, setLoadingFollowing] = useState(false)
+  const [myFollowing, setMyFollowing] = useState(new Set())
+  const [pendingUser, setPendingUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [commenting, setCommenting] = useState(null)
   const [commentText, setCommentText] = useState('')
@@ -19,6 +27,11 @@ export default function PublicProfile() {
   useEffect(() => {
     fetchProfile()
     fetchPosts()
+    setFollowers([])
+    setFollowing([])
+    setShowFollowers(false)
+    setShowFollowing(false)
+    fetchMyFollowing()
   }, [username])
 
   const fetchProfile = async () => {
@@ -27,6 +40,74 @@ export default function PublicProfile() {
       setProfile(res.data)
     } catch (error) {
       console.error("Failed to fetch profile", error)
+    }
+  }
+
+  const fetchConnections = async () => {
+    try {
+      const res = await api.get(`/api/auth/profile/${username}/connections/`)
+      setFollowers(res.data.followers || [])
+      setFollowing(res.data.following || [])
+    } catch (e) {
+      console.error("Failed to fetch connections", e)
+    }
+  }
+
+  const fetchMyFollowing = async () => {
+    try {
+      const res = await api.get('/api/auth/connections/')
+      const names = new Set((res.data.following || []).map(u => u.username))
+      setMyFollowing(names)
+    } catch (e) {
+      // Non-blocking
+      console.error('Failed to fetch my following', e)
+    }
+  }
+
+  const getAvatarUrl = (u) => {
+    if (u?.avatar) return u.avatar
+    const name = `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username || 'User'
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`
+  }
+
+  const toggleFollowUser = async (u) => {
+    if (!u?.username || u.username === currentUser?.username) return
+    const isFollowing = myFollowing.has(u.username)
+    setPendingUser(u.username)
+    try {
+      if (isFollowing) {
+        await api.delete(`/api/auth/follow/${u.username}/`)
+        const next = new Set(myFollowing)
+        next.delete(u.username)
+        setMyFollowing(next)
+      } else {
+        await api.post(`/api/auth/follow/${u.username}/`)
+        const next = new Set(myFollowing)
+        next.add(u.username)
+        setMyFollowing(next)
+      }
+    } catch (e) {
+      console.error('Failed to toggle follow', e)
+    } finally {
+      setPendingUser(null)
+    }
+  }
+
+  const openFollowers = async () => {
+    setShowFollowers(true)
+    if (followers.length === 0) {
+      setLoadingFollowers(true)
+      await fetchConnections()
+      setLoadingFollowers(false)
+    }
+  }
+
+  const openFollowing = async () => {
+    setShowFollowing(true)
+    if (following.length === 0) {
+      setLoadingFollowing(true)
+      await fetchConnections()
+      setLoadingFollowing(false)
     }
   }
 
@@ -207,13 +288,117 @@ export default function PublicProfile() {
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-slate-900 dark:text-white">{profile.followers_count}</div>
-                  <div className="text-xs text-slate-500 uppercase tracking-wide">Followers</div>
+                  <button type="button" onClick={openFollowers} className="text-xs text-slate-500 uppercase tracking-wide hover:text-slate-700 dark:hover:text-slate-300 transition-colors underline decoration-dotted cursor-pointer">
+                    Followers
+                  </button>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-slate-900 dark:text-white">{profile.following_count}</div>
-                  <div className="text-xs text-slate-500 uppercase tracking-wide">Following</div>
+                  <button type="button" onClick={openFollowing} className="text-xs text-slate-500 uppercase tracking-wide hover:text-slate-700 dark:hover:text-slate-300 transition-colors underline decoration-dotted cursor-pointer">
+                    Following
+                  </button>
                 </div>
               </div>
+              
+              {/* Followers Modal */}
+              {showFollowers && (
+                <div className="fixed inset-0 z-40 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50" onClick={() => setShowFollowers(false)}></div>
+                  <div className="relative z-50 w-full max-w-md glass rounded-2xl p-5 bg-white/90 dark:bg-black/70">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-white">Followers</h3>
+                      <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800" onClick={() => setShowFollowers(false)}><FiX /></button>
+                    </div>
+                    {loadingFollowers ? (
+                      <div className="py-6 flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-brand border-t-transparent"></div>
+                      </div>
+                    ) : followers.length === 0 ? (
+                      <div className="text-sm text-slate-500">No followers yet</div>
+                    ) : (
+                      <ul className="space-y-2 max-h-72 overflow-y-auto">
+                        {followers.map(u => (
+                          <li key={u.id}>
+                            <div className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-zinc-800 pipeline-colors">
+                              <Link to={`/profile/${u.username}`} onClick={() => setShowFollowers(false)} className="flex items-center gap-3 flex-1 min-w-0">
+                                <img alt="" src={getAvatarUrl(u)} className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                                <div className="text-sm truncate">
+                                  <div className="font-medium text-slate-900 dark:text-white truncate">{u.first_name || u.username}</div>
+                                  <div className="text-xs text-slate-500">@{u.username}</div>
+                                </div>
+                              </Link>
+                              {currentUser?.username !== u.username && (
+                                <button
+                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFollowUser(u) }}
+                                  disabled={pendingUser === u.username}
+                                  className={`px-2 py-1 text-xs rounded-full border transition-colors ${
+                                    myFollowing.has(u.username)
+                                      ? 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-zinc-700'
+                                      : 'bg-brand text-white border-brand hover:bg-brand-dark'
+                                  }`}
+                                  title={myFollowing.has(u.username) ? 'Unfollow' : 'Follow'}
+                                >
+                                  {pendingUser === u.username ? '...' : myFollowing.has(u.username) ? 'Following' : 'Follow'}
+                                </button>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Following Modal */}
+              {showFollowing && (
+                <div className="fixed inset-0 z-40 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50" onClick={() => setShowFollowing(false)}></div>
+                  <div className="relative z-50 w-full max-w-md glass rounded-2xl p-5 bg-white/90 dark:bg-black/70">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-base font-semibold text-slate-900 dark:text-white">Following</h3>
+                      <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-800" onClick={() => setShowFollowing(false)}><FiX /></button>
+                    </div>
+                    {loadingFollowing ? (
+                      <div className="py-6 flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-brand border-t-transparent"></div>
+                      </div>
+                    ) : following.length === 0 ? (
+                      <div className="text-sm text-slate-500">Not following anyone</div>
+                    ) : (
+                      <ul className="space-y-2 max-h-72 overflow-y-auto">
+                        {following.map(u => (
+                          <li key={u.id}>
+                            <div className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-zinc-800">
+                              <Link to={`/profile/${u.username}`} onClick={() => setShowFollowing(false)} className="flex items-center gap-3 flex-1 min-w-0">
+                                <img alt="" src={getAvatarUrl(u)} className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                                <div className="text-sm truncate">
+                                  <div className="font-medium text-slate-900 dark:text-white truncate">{u.first_name || u.username}</div>
+                                  <div className="text-xs text-slate-500">@{u.username}</div>
+                                </div>
+                              </Link>
+                              {currentUser?.username !== u.username && (
+                                <button
+                                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFollowUser(u) }}
+                                  disabled={pendingUser === u.username}
+                                  className={`px-2 py-1 text-xs rounded-full border transition-colors ${
+                                    myFollowing.has(u.username)
+                                      ? 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-zinc-700'
+                                      : 'bg-brand text-white border-brand hover:bg-brand-dark'
+                                  }`}
+                                  title={myFollowing.has(u.username) ? 'Unfollow' : 'Follow'}
+                                >
+                                  {pendingUser === u.username ? '...' : myFollowing.has(u.username) ? 'Following' : 'Follow'}
+                                </button>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>
